@@ -13,24 +13,26 @@ namespace MariGoldConverter
         static void Main(string[] args)
         {
             // Get HTML from website
-            string html = string.Empty;
-            string url = "https://wakeupandcode.com/key-vault-for-asp-net-core-web-apps";
+            string htmlContent = string.Empty;
+            string pageUrl = "https://wakeupandcode.com/key-vault-for-asp-net-core-web-apps";
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(pageUrl);
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             using (Stream stream = response.GetResponseStream())
             using (StreamReader reader = new StreamReader(stream))
             {
-                html = reader.ReadToEnd();
+                htmlContent = reader.ReadToEnd();
+
             }
 
             //Console.WriteLine(html);
 
+
             // Get content
             HtmlDocument htmlDoc = new HtmlDocument();
             //htmlDoc.Load(@"file.htm");
-            htmlDoc.LoadHtml(html);
+            htmlDoc.LoadHtml(htmlContent);
 
             HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"content\"]");
             string nodeContent = (node == null) ? "Error, id not found" : node.InnerHtml;
