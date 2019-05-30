@@ -5,7 +5,7 @@ using HtmlAgilityPack;
 using MariGold.OpenXHTML;
 
 
-namespace MariGoldConverter
+namespace EbookMaker
 {
     // https://github.com/kannan-ar/MariGold.OpenXHTML
     class Program
@@ -15,6 +15,7 @@ namespace MariGoldConverter
             // Get HTML from website
             string htmlContent = string.Empty;
             string pageUrl = "https://wakeupandcode.com/key-vault-for-asp-net-core-web-apps";
+            string outputFileName = "_output.docx";
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(pageUrl);
 
@@ -25,6 +26,7 @@ namespace MariGoldConverter
                 htmlContent = reader.ReadToEnd();
 
             }
+            outputFileName = request.RequestUri.AbsolutePath.Substring(1);
 
             //Console.WriteLine(html);
 
@@ -38,10 +40,10 @@ namespace MariGoldConverter
             string nodeContent = (node == null) ? "Error, id not found" : node.InnerHtml;
 
 
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Making your ebook...");
 
             // Create DOCX file
-            WordDocument wordDoc = new WordDocument("sample.docx");
+            WordDocument wordDoc = new WordDocument($"{outputFileName}.docx");
             wordDoc.Process(new HtmlParser(nodeContent));
             wordDoc.Save();
 
